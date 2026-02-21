@@ -9,6 +9,8 @@ services:
     ports:
       - ${POSTGRES_PORT:-5432}:5432
   api:
+    depends_on:
+      - database
     build:
       context: .
       dockerfile: Dockerfile.dev
