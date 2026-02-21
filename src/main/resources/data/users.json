@@ -1,0 +1,64 @@
+[
+  {
+    "email": "alejandro.gonzalez88@gmail.com",
+    "name": "Alejandro González Ruiz",
+    "phone": "+525512345678",
+    "password": "Password-123",
+    "taxId": "GORA880515H9A",
+    "addresses": [
+      {
+        "name": "Casa Principal",
+        "street": "Avenida Insurgentes Sur 1240, Col. del Valle",
+        "country": { "code": "MEX" }
+      },
+      {
+        "name": "Oficina CDMX",
+        "street": "Paseo de la Reforma 222, Juárez",
+        "country": { "code": "MEX" }
+      }
+    ]
+  },
+  {
+    "email": "mariana.vazquez.mx@gmail.com",
+    "name": "Mariana Vázquez Torres",
+    "phone": "+523398765432",
+    "password": "Password-123",
+    "taxId": "VATM921130RW3",
+    "addresses": [
+      {
+        "name": "Residencia Guadalajara",
+        "street": "Calle Libertad 1520, Americana",
+        "country": { "code": "MEX" }
+      },
+      {
+        "name": "Departamento Vacacional",
+        "street": "Av. Rafael Buelna 102, Mazatlán",
+        "country": { "code": "MEX" }
+      },
+      {
+        "name": "Bodega Negocio",
+        "street": "Calzada Lázaro Cárdenas 3010, Valle del Álamo",
+        "country": { "code": "MEX" }
+      }
+    ]
+  },
+  {
+    "email": "roberto.estrada.pro@gmail.com",
+    "name": "Roberto Estrada Luna",
+    "phone": "+528144556677",
+    "password": "Password-123",
+    "taxId": "EALR850120NI8",
+    "addresses": [
+      {
+        "name": "Casa Familiar",
+        "street": "Av. Eugenio Garza Sada 2501, Tecnológico",
+        "country": { "code": "MEX" }
+      },
+      {
+        "name": "Estudio",
+        "street": "Calle Padre Mier 450, Centro",
+        "country": { "code": "MEX" }
+      }
+    ]
+  }
+]
