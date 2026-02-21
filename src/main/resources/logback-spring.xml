@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="${LOGGING_LEVEL_ROOT:INFO}">
+        <appender-ref ref="CONSOLE" />
+    </root>
+    <logger name="com.chakray.test" level="${LOGGING_LEVEL_COM_CHAKRAY_TEST:DEBUG}"
+        additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="org.springframework.web" level="${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK:INFO}" />
+    <logger name="org.hibernate" level="${LOGGING_LEVEL_ORG_HIBERNATE:INFO}" />
+
+</configuration>
