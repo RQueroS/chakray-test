@@ -1,5 +1,6 @@
 package com.chakray.test.infrastructure.persistence.jpa.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,11 +18,17 @@ public class AddressEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "street", nullable = false)
     private String street;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "country_id", nullable = false)
     private CountryEntity country;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 }
