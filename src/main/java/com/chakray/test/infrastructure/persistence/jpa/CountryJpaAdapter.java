@@ -1,6 +1,7 @@
 package com.chakray.test.infrastructure.persistence.jpa;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,14 +24,26 @@ public class CountryJpaAdapter implements CountryRepositoryPort {
     @Override
     public List<Country> findAllCountries() {
         logger.debug("Fetching all countries from the database");
-        List<CountryEntity> entities = countryJpaRepository.findAll();
+        List<CountryEntity> countryEntities = countryJpaRepository.findAll();
 
         logger.debug("Mapping CountryEntity to Country domain objects");
-        List<Country> countries = entities.stream()
+        List<Country> countries = countryEntities.stream()
                 .map(countryJpaMapper::toDomain)
                 .toList();
 
         logger.debug("Successfully mapped {} CountryEntity to Country", countries.size());
         return countries;
+    }
+
+    @Override
+    public Optional<Country> findCountryByCode(String code) {
+        logger.debug("Fetching country with code {} from the database", code);
+        Optional<CountryEntity> countryEntity = countryJpaRepository.findByCode(code);
+
+        logger.debug("Mapping CountryEntity to Country domain object if present");
+        Optional<Country> country = countryEntity.map(countryJpaMapper::toDomain);
+
+        logger.debug("Successfully mapped CountryEntity to Country: {}", country.isPresent());
+        return country;
     }
 }

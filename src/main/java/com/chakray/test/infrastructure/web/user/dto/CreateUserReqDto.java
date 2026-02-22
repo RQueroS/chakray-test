@@ -1,6 +1,9 @@
 package com.chakray.test.infrastructure.web.user.dto;
 
+import java.util.List;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -47,4 +50,7 @@ public class CreateUserReqDto {
     @Size(min = 13, max = 13, message = "Tax ID must be exactly 13 characters long")
     @Pattern(regexp = "^[A-Z&Ñ]{4}\\d{6}[A-Z0-9]{3}$", message = "Tax ID must follow the format: 4 letters (A-Z, &, Ñ), 6 digits, and 3 alphanumeric characters")
     private String taxId;
+
+    @Valid
+    private List<CreateAddressReqDto> addresses;
 }

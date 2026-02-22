@@ -88,6 +88,13 @@ public class UserJpaAdapter implements UserRepositoryPort {
     public User saveUser(User user) {
         logger.debug("Saving user to the database: {}", user);
         UserEntity userEntity = userJpaMapper.toEntity(user);
+
+        if (userEntity.getAddresses() != null) {
+            logger.debug("Setting user reference in address entities");
+            userEntity.getAddresses().forEach(addressEntity -> addressEntity.setUser(userEntity));
+        }
+
+        logger.debug("Saving UserEntity to the database");
         UserEntity savedEntity = userJpaRepository.save(userEntity);
 
         logger.debug("Mapping saved UserEntity back to User domain object");

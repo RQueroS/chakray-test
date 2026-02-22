@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import com.chakray.test.domain.Address;
 import com.chakray.test.domain.User;
 import com.chakray.test.infrastructure.web.address.dto.AddressResDto;
+import com.chakray.test.infrastructure.web.user.dto.CreateAddressReqDto;
 import com.chakray.test.infrastructure.web.user.dto.CreateUserReqDto;
 import com.chakray.test.infrastructure.web.user.dto.UserResDto;
 
@@ -35,4 +36,7 @@ public abstract class UserDtoMapper {
     }
 
     public abstract User toDomain(CreateUserReqDto createUserReqDto);
+
+    @Mapping(source = "countryCode", target = "country.code")
+    public abstract Address toDomain(CreateAddressReqDto createAddressReqDto);
 }

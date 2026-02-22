@@ -51,6 +51,8 @@ public class UserController {
         return ResponseEntity.ok(res);
     }
 
+    @Operation(summary = "Create a new user")
+    @ApiResponse(responseCode = "200", description = "Successfully created a new user")
     @PostMapping
     public ResponseEntity<UserResDto> createUser(@Valid @RequestBody CreateUserReqDto body) {
         logger.info("Received request to create a new user with name: {}", body.getName());
