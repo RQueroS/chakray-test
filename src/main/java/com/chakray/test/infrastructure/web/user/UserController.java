@@ -84,33 +84,53 @@ public class UserController {
     @Operation(summary = "Delete a user by ID")
     @ApiResponse(responseCode = "204", description = "Successfully deleted the user")
     @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(
-            @Schema(description = "The UUID of the user to delete", example = "123e4567-e89b-12d3-a456-426614174000") @PathVariable @Pattern(regexp = USER_ID_PATH_VARIABLE_REGEX, message = "Invalid UUID format") String id) {
-        logger.info("Received request to delete user with ID: {}", id);
-        deleteUserUseCase.deleteUser(id);
+            @Schema(description = "The UUID of the user to delete", example = "123e4567-e89b-12d3-a456-426614174000") @PathVariable @Pattern(regexp = USER_ID_PATH_VARIABLE_REGEX, message = "Invalid UUID format") String userId) {
+        logger.info("Received request to delete user with ID: {}", userId);
+        deleteUserUseCase.deleteUser(userId);
 
-        logger.info("Successfully deleted user with ID: {}", id);
+        logger.info("Successfully deleted user with ID: {}", userId);
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Update a user by ID")
     @ApiResponse(responseCode = "200", description = "Successfully updated the user")
     @ApiResponse(responseCode = "404", description = "User not found or country not found for one of the user's addresses", content = @Content)
-    @PatchMapping("/{id}")
+    @PatchMapping("/{userId}")
     public ResponseEntity<UserResDto> updateUser(
-            @Schema(description = "The UUID of the user to update", example = "123e4567-e89b-12d3-a456-426614174000") @PathVariable @Pattern(regexp = USER_ID_PATH_VARIABLE_REGEX, message = "Invalid UUID format") String id,
+            @Schema(description = "The UUID of the user to update", example = "123e4567-e89b-12d3-a456-426614174000") @PathVariable @Pattern(regexp = USER_ID_PATH_VARIABLE_REGEX, message = "Invalid UUID format") String userId,
             @Valid @RequestBody UpdateUserReqDto body) {
-        logger.info("Received request to update user with ID: {}", id);
+        logger.info("Received request to update user with ID: {}", userId);
         User domainUser = userDtoMapper.toDomain(body);
 
-        logger.debug("Calling saveUserUseCase to update user with ID: {}", id);
-        User user = saveUserUseCase.updateUser(id, domainUser);
+        logger.debug("Calling saveUserUseCase to update user with ID: {}", userId);
+        User user = saveUserUseCase.updateUser(userId, domainUser);
 
-        logger.info("Successfully updated user with ID: {}", id);
+        logger.info("Successfully updated user with ID: {}", userId);
         UserResDto res = userDtoMapper.toDto(user);
 
         logger.info("Returning response for updated user with ID: {}", res.getId());
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/{userId}/addresses")
+    public ResponseEntity<String> getUserAddresses(@PathVariable String userId) {
+        return ResponseEntity.ok("User addresses for user ID: " + userId);
+    }
+
+    @PostMapping("/{userId}/addresses")
+    public ResponseEntity<String> addUserAddress(@PathVariable String userId) {
+        return ResponseEntity.ok("Add address for user ID: " + userId);
+    }
+
+    @PatchMapping("/{userId}/addresses/{addressId}")
+    public ResponseEntity<String> updateUserAddress(@PathVariable String userId, @PathVariable String addressId) {
+        return ResponseEntity.ok("Update address with ID: " + addressId + " for user ID: " + userId);
+    }
+
+    @DeleteMapping("/{userId}/addresses/{addressId}")
+    public ResponseEntity<String> deleteUserAddress(@PathVariable String userId, @PathVariable String addressId) {
+        return ResponseEntity.ok("Delete address with ID: " + addressId + " for user ID: " + userId);
     }
 }

@@ -2,8 +2,6 @@ package com.chakray.test.infrastructure.web.user.dto;
 
 import java.util.List;
 
-import com.chakray.test.infrastructure.web.address.dto.AddressResDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
