@@ -12,7 +12,6 @@ public class UserResDto {
     private String email;
     private String name;
     private String phone;
-    private String password;
     private String taxId;
     private String createdAt;
     private List<AddressResDto> addresses;
