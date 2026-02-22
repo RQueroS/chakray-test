@@ -2,6 +2,7 @@ package com.chakray.test.domain.ports.out;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.chakray.test.domain.User;
 
@@ -12,9 +13,9 @@ public interface UserRepositoryPort {
 
     Optional<User> findUserByTaxId(String taxId);
 
-    Optional<User> findUserById(String id);
+    Optional<User> findUserById(UUID id);
 
-    void deleteUserById(String id);
+    void deleteUserById(UUID id);
 
     User updateUser(User currentUser, User updatedUser);
 }

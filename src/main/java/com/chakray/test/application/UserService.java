@@ -1,6 +1,7 @@
 package com.chakray.test.application;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +75,7 @@ public class UserService implements RetrieveUserUseCase, SaveUserUseCase, Delete
     }
 
     @Override
-    public void deleteUser(String id) {
+    public void deleteUser(UUID id) {
         logger.debug("Deleting user with id {}", id);
         User user = getUserById(id);
 
@@ -83,7 +84,7 @@ public class UserService implements RetrieveUserUseCase, SaveUserUseCase, Delete
     }
 
     @Override
-    public User updateUser(String userId, User user) {
+    public User updateUser(UUID userId, User user) {
         logger.debug("Updating user with id {}", userId);
         User currentUser = getUserById(userId);
 
@@ -93,7 +94,7 @@ public class UserService implements RetrieveUserUseCase, SaveUserUseCase, Delete
         return updatedUser;
     }
 
-    private User getUserById(String id) {
+    private User getUserById(UUID id) {
         logger.debug("Retrieving user with id {}", id);
         return userRepositoryPort.findUserById(id).orElseThrow(() -> {
             logger.warn("User with id {} not found", id);

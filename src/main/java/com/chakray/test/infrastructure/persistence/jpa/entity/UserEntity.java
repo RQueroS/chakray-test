@@ -3,6 +3,7 @@ package com.chakray.test.infrastructure.persistence.jpa.entity;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -25,7 +26,7 @@ import lombok.ToString;
 public class UserEntity {
     @Id
     @UuidGenerator
-    private String id;
+    private UUID id;
 
     @Column(name = "email", nullable = false)
     private String email;

@@ -2,6 +2,7 @@ package com.chakray.test.infrastructure.persistence.jpa;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,7 +115,7 @@ public class UserJpaAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public Optional<User> findUserById(String id) {
+    public Optional<User> findUserById(UUID id) {
         logger.debug("Finding user by id: {}", id);
         Optional<UserEntity> userEntity = userJpaRepository.findById(id);
 
@@ -123,7 +124,7 @@ public class UserJpaAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public void deleteUserById(String id) {
+    public void deleteUserById(UUID id) {
         logger.debug("Deleting user by id: {}", id);
         userJpaRepository.deleteById(id);
 
