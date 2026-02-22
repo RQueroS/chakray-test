@@ -17,9 +17,9 @@ public class UserService implements RetrieveUserUseCase {
     private final UserRepositoryPort userRepositoryPort;
 
     @Override
-    public List<User> getUsers() {
+    public List<User> getUsers(String sortedBy, String orderBy) {
         logger.debug("Retrieving users from UserRepositoryPort");
-        List<User> users = userRepositoryPort.findAllUsers();
+        List<User> users = userRepositoryPort.findAllUsers(sortedBy, orderBy);
 
         logger.debug("Successfully retrieved {} users", users.size());
         return users;

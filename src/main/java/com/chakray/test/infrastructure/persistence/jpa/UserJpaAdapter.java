@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.chakray.test.domain.User;
@@ -21,9 +22,9 @@ public class UserJpaAdapter implements UserRepositoryPort {
     private final UserJpaMapper userJpaMapper;
 
     @Override
-    public List<User> findAllUsers() {
+    public List<User> findAllUsers(String sortedBy, String orderBy) {
         logger.debug("Fetching all users from the database");
-        List<UserEntity> users = userJpaRepository.findAll();
+        List<UserEntity> users = userJpaRepository.findAll(Sort.by(Sort.Direction.fromString(orderBy), sortedBy));
 
         logger.debug("Mapping UserEntity to User domain objects");
         List<User> domainUsers = users.stream()

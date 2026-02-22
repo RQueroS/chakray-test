@@ -5,5 +5,5 @@ import java.util.List;
 import com.chakray.test.domain.User;
 
 public interface UserRepositoryPort {
-    List<User> findAllUsers();
+    List<User> findAllUsers(String sortedBy, String orderBy);
 }
