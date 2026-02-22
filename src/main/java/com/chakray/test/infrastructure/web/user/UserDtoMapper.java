@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import com.chakray.test.domain.Address;
 import com.chakray.test.domain.User;
 import com.chakray.test.infrastructure.web.address.dto.AddressResDto;
+import com.chakray.test.infrastructure.web.user.dto.CreateUserReqDto;
 import com.chakray.test.infrastructure.web.user.dto.UserResDto;
 
 @Mapper(componentModel = "spring")
@@ -32,4 +33,6 @@ public abstract class UserDtoMapper {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         return utcZonedDateTime.format(formatter);
     }
+
+    public abstract User toDomain(CreateUserReqDto createUserReqDto);
 }

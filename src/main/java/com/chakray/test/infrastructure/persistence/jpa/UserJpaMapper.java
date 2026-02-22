@@ -8,4 +8,6 @@ import com.chakray.test.infrastructure.persistence.jpa.entity.UserEntity;
 @Mapper(componentModel = "spring")
 public interface UserJpaMapper {
     User toDomain(UserEntity entity);
+
+    UserEntity toEntity(User domain);
 }

@@ -1,6 +1,7 @@
 package com.chakray.test.infrastructure.persistence.jpa;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,5 +82,27 @@ public class UserJpaAdapter implements UserRepositoryPort {
                     return null;
             }
         };
+    }
+
+    @Override
+    public User saveUser(User user) {
+        logger.debug("Saving user to the database: {}", user);
+        UserEntity userEntity = userJpaMapper.toEntity(user);
+        UserEntity savedEntity = userJpaRepository.save(userEntity);
+
+        logger.debug("Mapping saved UserEntity back to User domain object");
+        User savedUser = userJpaMapper.toDomain(savedEntity);
+
+        logger.debug("Successfully saved user with id {}", savedUser.getId());
+        return savedUser;
+    }
+
+    @Override
+    public Optional<User> findUserByTaxId(String taxId) {
+        logger.debug("Finding user by taxId: {}", taxId);
+        Optional<UserEntity> userEntity = userJpaRepository.findByTaxId(taxId);
+
+        logger.debug("User found: {}", userEntity.isPresent());
+        return userEntity.map(userJpaMapper::toDomain);
     }
 }
