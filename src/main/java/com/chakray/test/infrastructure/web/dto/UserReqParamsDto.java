@@ -6,11 +6,21 @@ import lombok.Data;
 
 @Data
 public class UserReqParamsDto {
+    private static final String ALLOWED_FIELDS = "id|email|name|phone|taxId|createdAt";
+    private static final String ALLOWED_OPERATORS = "eq|co|sw|ew";
+
     @Schema(description = "Field to sort by", example = "name")
-    @Pattern(regexp = "id|email|name|phone|taxId|createdAt", message = "sortedBy must be one of 'id', 'email', 'name', 'phone', 'taxId', or 'createdAt'")
+    @Pattern(regexp = ALLOWED_FIELDS, message = "sortedBy must be one of " + ALLOWED_FIELDS)
     private String sortedBy = "id";
 
     @Schema(description = "Order of sorting", example = "ASC")
     @Pattern(regexp = "ASC|DESC", message = "orderBy must be one of 'ASC' or 'DESC'")
     private String orderBy = "ASC";
+
+    @Schema(description = "Filter in the format 'field+operator+value'", example = "name+co+Alejandro")
+    @Pattern(regexp = "(" + ALLOWED_FIELDS
+            + ")\\+(" + ALLOWED_OPERATORS
+            + ")\\+.+", message = "filter must be in the format 'field+operator+value', where field is one of "
+                    + ALLOWED_FIELDS + " and operator is one of " + ALLOWED_OPERATORS)
+    private String filter;
 }

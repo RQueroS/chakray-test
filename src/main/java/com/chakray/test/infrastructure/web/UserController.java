@@ -37,7 +37,8 @@ public class UserController {
     public ResponseEntity<List<UserResDto>> getUsers(@Valid @ParameterObject UserReqParamsDto reqParams) {
         logger.info("Received request to get all users");
         logger.debug("Calling retrieveUserUseCase to get users");
-        List<User> users = retrieveUserUseCase.getUsers(reqParams.getSortedBy(), reqParams.getOrderBy());
+        List<User> users = retrieveUserUseCase.getUsers(reqParams.getSortedBy(), reqParams.getOrderBy(),
+                reqParams.getFilter());
 
         logger.debug("Mapping User entities to UserResDto");
         List<UserResDto> res = users.stream().map(userDtoMapper::toDto).toList();
