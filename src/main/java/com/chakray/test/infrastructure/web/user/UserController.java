@@ -25,6 +25,7 @@ import com.chakray.test.infrastructure.web.user.dto.UserReqParamsDto;
 import com.chakray.test.infrastructure.web.user.dto.UserResDto;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -63,8 +64,8 @@ public class UserController {
 
     @Operation(summary = "Create a new user")
     @ApiResponse(responseCode = "200", description = "Successfully created a new user")
-    @ApiResponse(responseCode = "404", description = "Country not found for one of the user's addresses")
-    @ApiResponse(responseCode = "409", description = "User with the same tax ID already exists")
+    @ApiResponse(responseCode = "404", description = "Country not found for one of the user's addresses", content = @Content)
+    @ApiResponse(responseCode = "409", description = "User with the same tax ID already exists", content = @Content)
     @PostMapping
     public ResponseEntity<UserResDto> createUser(@Valid @RequestBody CreateUserReqDto body) {
         logger.info("Received request to create a new user with name: {}", body.getName());
@@ -82,7 +83,7 @@ public class UserController {
 
     @Operation(summary = "Delete a user by ID")
     @ApiResponse(responseCode = "204", description = "Successfully deleted the user")
-    @ApiResponse(responseCode = "404", description = "User not found")
+    @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(
             @Schema(description = "The UUID of the user to delete", example = "123e4567-e89b-12d3-a456-426614174000") @PathVariable @Pattern(regexp = USER_ID_PATH_VARIABLE_REGEX, message = "Invalid UUID format") String id) {
@@ -93,6 +94,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Update a user by ID")
+    @ApiResponse(responseCode = "200", description = "Successfully updated the user")
+    @ApiResponse(responseCode = "404", description = "User not found or country not found for one of the user's addresses", content = @Content)
     @PatchMapping("/{id}")
     public ResponseEntity<UserResDto> updateUser(
             @Schema(description = "The UUID of the user to update", example = "123e4567-e89b-12d3-a456-426614174000") @PathVariable @Pattern(regexp = USER_ID_PATH_VARIABLE_REGEX, message = "Invalid UUID format") String id,
