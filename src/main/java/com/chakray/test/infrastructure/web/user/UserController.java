@@ -1,4 +1,4 @@
-package com.chakray.test.infrastructure.web;
+package com.chakray.test.infrastructure.web.user;
 
 import java.util.List;
 
@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.chakray.test.domain.User;
 import com.chakray.test.domain.ports.in.RetrieveUserUseCase;
-import com.chakray.test.infrastructure.web.dto.UserDtoMapper;
-import com.chakray.test.infrastructure.web.dto.UserReqParamsDto;
-import com.chakray.test.infrastructure.web.dto.UserResDto;
+import com.chakray.test.infrastructure.web.user.dto.UserReqParamsDto;
+import com.chakray.test.infrastructure.web.user.dto.UserResDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

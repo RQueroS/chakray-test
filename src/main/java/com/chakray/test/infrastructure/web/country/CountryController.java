@@ -1,4 +1,4 @@
-package com.chakray.test.infrastructure.web;
+package com.chakray.test.infrastructure.web.country;
 
 import java.util.List;
 
@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.chakray.test.domain.Country;
 import com.chakray.test.domain.ports.in.RetrieveCountryUseCase;
-import com.chakray.test.infrastructure.web.dto.CountryDtoMapper;
-import com.chakray.test.infrastructure.web.dto.CountryResDto;
+import com.chakray.test.infrastructure.web.country.dto.CountryResDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

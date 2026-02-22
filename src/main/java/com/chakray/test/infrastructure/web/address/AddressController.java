@@ -1,4 +1,4 @@
-package com.chakray.test.infrastructure.web;
+package com.chakray.test.infrastructure.web.address;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

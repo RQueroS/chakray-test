@@ -1,4 +1,4 @@
-package com.chakray.test.infrastructure.web.dto;
+package com.chakray.test.infrastructure.web.user;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.chakray.test.domain.Address;
 import com.chakray.test.domain.User;
+import com.chakray.test.infrastructure.web.address.dto.AddressResDto;
+import com.chakray.test.infrastructure.web.user.dto.UserResDto;
 
 @Mapper(componentModel = "spring")
 public abstract class UserDtoMapper {
