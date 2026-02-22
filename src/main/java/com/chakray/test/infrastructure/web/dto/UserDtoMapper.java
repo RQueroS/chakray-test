@@ -1,15 +1,33 @@
 package com.chakray.test.infrastructure.web.dto;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.chakray.test.domain.Address;
 import com.chakray.test.domain.User;
 
 @Mapper(componentModel = "spring")
-public interface UserDtoMapper {
-    UserResDto toDto(User user);
+public abstract class UserDtoMapper {
+    @Value("${app.timezone}")
+    protected String zoneId;
+
+    public abstract UserResDto toDto(User user);
 
     @Mapping(source = "country.code", target = "countryCode")
-    AddressResDto toDto(Address address);
+    public abstract AddressResDto toDto(Address address);
+
+    public String utcToLocalZone(Instant instant) {
+        if (instant == null)
+            return null;
+
+        ZonedDateTime utcZonedDateTime = instant.atZone(ZoneId.of(zoneId));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        return utcZonedDateTime.format(formatter);
+    }
 }

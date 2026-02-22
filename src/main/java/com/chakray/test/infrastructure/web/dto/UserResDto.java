@@ -1,6 +1,5 @@
 package com.chakray.test.infrastructure.web.dto;
 
-import java.time.Instant;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +14,6 @@ public class UserResDto {
     private String phone;
     private String password;
     private String taxId;
-    private Instant createdAt;
+    private String createdAt;
     private List<AddressResDto> addresses;
 }
