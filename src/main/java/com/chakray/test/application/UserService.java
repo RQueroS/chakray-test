@@ -10,6 +10,7 @@ import com.chakray.test.application.exceptions.NotFoundException;
 import com.chakray.test.domain.Address;
 import com.chakray.test.domain.Country;
 import com.chakray.test.domain.User;
+import com.chakray.test.domain.ports.in.DeleteUserUseCase;
 import com.chakray.test.domain.ports.in.RetrieveUserUseCase;
 import com.chakray.test.domain.ports.in.SaveUserUseCase;
 import com.chakray.test.domain.ports.out.CountryRepositoryPort;
@@ -18,7 +19,7 @@ import com.chakray.test.domain.ports.out.UserRepositoryPort;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class UserService implements RetrieveUserUseCase, SaveUserUseCase {
+public class UserService implements RetrieveUserUseCase, SaveUserUseCase, DeleteUserUseCase {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepositoryPort userRepositoryPort;
     private final CountryRepositoryPort countryRepositoryPort;
@@ -70,5 +71,17 @@ public class UserService implements RetrieveUserUseCase, SaveUserUseCase {
 
         logger.debug("Successfully saved user with id {}", savedUser.getId());
         return savedUser;
+    }
+
+    @Override
+    public void deleteUser(String id) {
+        logger.debug("Deleting user with id {}", id);
+        userRepositoryPort.findUserById(id).orElseThrow(() -> {
+            logger.warn("User with id {} not found", id);
+            return new NotFoundException("User with id " + id + " not found");
+        });
+
+        userRepositoryPort.deleteUserById(id);
+        logger.debug("Successfully deleted user with id {}", id);
     }
 }

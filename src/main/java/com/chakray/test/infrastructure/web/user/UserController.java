@@ -6,13 +6,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chakray.test.domain.User;
+import com.chakray.test.domain.ports.in.DeleteUserUseCase;
 import com.chakray.test.domain.ports.in.RetrieveUserUseCase;
 import com.chakray.test.domain.ports.in.SaveUserUseCase;
 import com.chakray.test.infrastructure.web.user.dto.CreateUserReqDto;
@@ -20,9 +23,11 @@ import com.chakray.test.infrastructure.web.user.dto.UserReqParamsDto;
 import com.chakray.test.infrastructure.web.user.dto.UserResDto;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "User")
@@ -34,6 +39,7 @@ public class UserController {
     private final UserDtoMapper userDtoMapper;
     private final RetrieveUserUseCase retrieveUserUseCase;
     private final SaveUserUseCase saveUserUseCase;
+    private final DeleteUserUseCase deleteUserUseCase;
 
     @Operation(summary = "Get all users with optional sorting")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved list of users")
@@ -53,6 +59,8 @@ public class UserController {
 
     @Operation(summary = "Create a new user")
     @ApiResponse(responseCode = "200", description = "Successfully created a new user")
+    @ApiResponse(responseCode = "404", description = "Country not found for one of the user's addresses")
+    @ApiResponse(responseCode = "409", description = "User with the same tax ID already exists")
     @PostMapping
     public ResponseEntity<UserResDto> createUser(@Valid @RequestBody CreateUserReqDto body) {
         logger.info("Received request to create a new user with name: {}", body.getName());
@@ -66,5 +74,18 @@ public class UserController {
 
         logger.info("Returning response for created user with ID: {}", res.getId());
         return ResponseEntity.ok(res);
+    }
+
+    @Operation(summary = "Delete a user by ID")
+    @ApiResponse(responseCode = "204", description = "Successfully deleted the user")
+    @ApiResponse(responseCode = "404", description = "User not found")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(
+            @Schema(description = "The UUID of the user to delete", example = "123e4567-e89b-12d3-a456-426614174000") @PathVariable @Pattern(regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", message = "Invalid UUID format") String id) {
+        logger.info("Received request to delete user with ID: {}", id);
+        deleteUserUseCase.deleteUser(id);
+
+        logger.info("Successfully deleted user with ID: {}", id);
+        return ResponseEntity.noContent().build();
     }
 }

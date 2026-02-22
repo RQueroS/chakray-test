@@ -11,4 +11,8 @@ public interface UserRepositoryPort {
     User saveUser(User user);
 
     Optional<User> findUserByTaxId(String taxId);
+
+    Optional<User> findUserById(String id);
+
+    void deleteUserById(String id);
 }

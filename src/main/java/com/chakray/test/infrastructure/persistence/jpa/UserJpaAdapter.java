@@ -112,4 +112,21 @@ public class UserJpaAdapter implements UserRepositoryPort {
         logger.debug("User found: {}", userEntity.isPresent());
         return userEntity.map(userJpaMapper::toDomain);
     }
+
+    @Override
+    public Optional<User> findUserById(String id) {
+        logger.debug("Finding user by id: {}", id);
+        Optional<UserEntity> userEntity = userJpaRepository.findById(id);
+
+        logger.debug("User found: {}", userEntity.isPresent());
+        return userEntity.map(userJpaMapper::toDomain);
+    }
+
+    @Override
+    public void deleteUserById(String id) {
+        logger.debug("Deleting user by id: {}", id);
+        userJpaRepository.deleteById(id);
+
+        logger.debug("User with id {} deleted successfully", id);
+    }
 }

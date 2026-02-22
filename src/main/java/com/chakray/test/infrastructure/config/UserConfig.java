@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.chakray.test.application.UserService;
+import com.chakray.test.domain.ports.in.DeleteUserUseCase;
 import com.chakray.test.domain.ports.in.RetrieveUserUseCase;
 import com.chakray.test.domain.ports.in.SaveUserUseCase;
 import com.chakray.test.domain.ports.out.CountryRepositoryPort;
@@ -19,6 +20,12 @@ public class UserConfig {
 
     @Bean
     public SaveUserUseCase saveUserUseCase(UserRepositoryPort userRepositoryPort,
+            CountryRepositoryPort countryRepositoryPort) {
+        return new UserService(userRepositoryPort, countryRepositoryPort);
+    }
+
+    @Bean
+    public DeleteUserUseCase deleteUserUseCase(UserRepositoryPort userRepositoryPort,
             CountryRepositoryPort countryRepositoryPort) {
         return new UserService(userRepositoryPort, countryRepositoryPort);
     }
