@@ -76,12 +76,28 @@ public class UserService implements RetrieveUserUseCase, SaveUserUseCase, Delete
     @Override
     public void deleteUser(String id) {
         logger.debug("Deleting user with id {}", id);
-        userRepositoryPort.findUserById(id).orElseThrow(() -> {
+        User user = getUserById(id);
+
+        userRepositoryPort.deleteUserById(user.getId());
+        logger.debug("Successfully deleted user with id {}", user.getId());
+    }
+
+    @Override
+    public User updateUser(String userId, User user) {
+        logger.debug("Updating user with id {}", userId);
+        User currentUser = getUserById(userId);
+
+        User updatedUser = userRepositoryPort.updateUser(currentUser, user);
+
+        logger.debug("Successfully updated user with id {}", updatedUser.getId());
+        return updatedUser;
+    }
+
+    private User getUserById(String id) {
+        logger.debug("Retrieving user with id {}", id);
+        return userRepositoryPort.findUserById(id).orElseThrow(() -> {
             logger.warn("User with id {} not found", id);
             return new NotFoundException("User with id " + id + " not found");
         });
-
-        userRepositoryPort.deleteUserById(id);
-        logger.debug("Successfully deleted user with id {}", id);
     }
 }

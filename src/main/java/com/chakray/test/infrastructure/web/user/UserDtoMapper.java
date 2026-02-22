@@ -14,6 +14,7 @@ import com.chakray.test.domain.User;
 import com.chakray.test.infrastructure.web.address.dto.AddressResDto;
 import com.chakray.test.infrastructure.web.user.dto.CreateAddressReqDto;
 import com.chakray.test.infrastructure.web.user.dto.CreateUserReqDto;
+import com.chakray.test.infrastructure.web.user.dto.UpdateUserReqDto;
 import com.chakray.test.infrastructure.web.user.dto.UserResDto;
 
 @Mapper(componentModel = "spring")
@@ -39,4 +40,6 @@ public abstract class UserDtoMapper {
 
     @Mapping(source = "countryCode", target = "country.code")
     public abstract Address toDomain(CreateAddressReqDto createAddressReqDto);
+
+    public abstract User toDomain(UpdateUserReqDto updateUserReqDto);
 }

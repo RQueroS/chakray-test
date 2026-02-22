@@ -129,4 +129,28 @@ public class UserJpaAdapter implements UserRepositoryPort {
 
         logger.debug("User with id {} deleted successfully", id);
     }
+
+    @Override
+    public User updateUser(User currentUser, User updatedUser) {
+        logger.debug("Updating user with id {}: currentUser={}, updatedUser={}", currentUser.getId(), currentUser,
+                updatedUser);
+
+        UserEntity currentEntity = userJpaMapper.toEntity(currentUser);
+        userJpaMapper.updateEntityFromDto(updatedUser, currentEntity);
+
+        // Mantener relación con direcciones
+        if (currentEntity.getAddresses() != null) {
+            logger.debug("Setting user reference in updated address entities");
+            currentEntity.getAddresses().forEach(addressEntity -> addressEntity.setUser(currentEntity));
+        }
+
+        logger.debug("Saving updated UserEntity to the database");
+        UserEntity savedEntity = userJpaRepository.save(currentEntity);
+
+        logger.debug("Mapping saved UserEntity back to User domain object");
+        User savedUser = userJpaMapper.toDomain(savedEntity);
+
+        logger.debug("Successfully updated user with id {}", savedUser.getId());
+        return savedUser;
+    }
 }

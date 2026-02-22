@@ -8,6 +8,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import com.chakray.test.domain.ports.in.DeleteUserUseCase;
 import com.chakray.test.domain.ports.in.RetrieveUserUseCase;
 import com.chakray.test.domain.ports.in.SaveUserUseCase;
 import com.chakray.test.infrastructure.web.user.dto.CreateUserReqDto;
+import com.chakray.test.infrastructure.web.user.dto.UpdateUserReqDto;
 import com.chakray.test.infrastructure.web.user.dto.UserReqParamsDto;
 import com.chakray.test.infrastructure.web.user.dto.UserResDto;
 
@@ -40,6 +42,8 @@ public class UserController {
     private final RetrieveUserUseCase retrieveUserUseCase;
     private final SaveUserUseCase saveUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
+
+    private static final String USER_ID_PATH_VARIABLE_REGEX = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
 
     @Operation(summary = "Get all users with optional sorting")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved list of users")
@@ -81,11 +85,28 @@ public class UserController {
     @ApiResponse(responseCode = "404", description = "User not found")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(
-            @Schema(description = "The UUID of the user to delete", example = "123e4567-e89b-12d3-a456-426614174000") @PathVariable @Pattern(regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", message = "Invalid UUID format") String id) {
+            @Schema(description = "The UUID of the user to delete", example = "123e4567-e89b-12d3-a456-426614174000") @PathVariable @Pattern(regexp = USER_ID_PATH_VARIABLE_REGEX, message = "Invalid UUID format") String id) {
         logger.info("Received request to delete user with ID: {}", id);
         deleteUserUseCase.deleteUser(id);
 
         logger.info("Successfully deleted user with ID: {}", id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResDto> updateUser(
+            @Schema(description = "The UUID of the user to update", example = "123e4567-e89b-12d3-a456-426614174000") @PathVariable @Pattern(regexp = USER_ID_PATH_VARIABLE_REGEX, message = "Invalid UUID format") String id,
+            @Valid @RequestBody UpdateUserReqDto body) {
+        logger.info("Received request to update user with ID: {}", id);
+        User domainUser = userDtoMapper.toDomain(body);
+
+        logger.debug("Calling saveUserUseCase to update user with ID: {}", id);
+        User user = saveUserUseCase.updateUser(id, domainUser);
+
+        logger.info("Successfully updated user with ID: {}", id);
+        UserResDto res = userDtoMapper.toDto(user);
+
+        logger.info("Returning response for updated user with ID: {}", res.getId());
+        return ResponseEntity.ok(res);
     }
 }

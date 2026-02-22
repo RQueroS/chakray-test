@@ -15,4 +15,6 @@ public interface UserRepositoryPort {
     Optional<User> findUserById(String id);
 
     void deleteUserById(String id);
+
+    User updateUser(User currentUser, User updatedUser);
 }
