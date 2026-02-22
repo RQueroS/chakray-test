@@ -1,4 +1,4 @@
-package com.chakray.test.infrastructure.web.user.dto;
+package com.chakray.test.infrastructure.web.address.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
