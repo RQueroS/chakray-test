@@ -39,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final UserDtoMapper userDtoMapper;
     private final RetrieveUserUseCase retrieveUserUseCase;
     private final SaveUserUseCase saveUserUseCase;
@@ -110,25 +111,5 @@ public class UserController {
 
         logger.info("Returning response for updated user with ID: {}", res.getId());
         return ResponseEntity.ok(res);
-    }
-
-    @GetMapping("/{userId}/addresses")
-    public ResponseEntity<String> getUserAddresses(@PathVariable UUID userId) {
-        return ResponseEntity.ok("User addresses for user ID: " + userId);
-    }
-
-    @PostMapping("/{userId}/addresses")
-    public ResponseEntity<String> addUserAddress(@PathVariable UUID userId) {
-        return ResponseEntity.ok("Add address for user ID: " + userId);
-    }
-
-    @PatchMapping("/{userId}/addresses/{addressId}")
-    public ResponseEntity<String> updateUserAddress(@PathVariable UUID userId, @PathVariable UUID addressId) {
-        return ResponseEntity.ok("Update address with ID: " + addressId + " for user ID: " + userId);
-    }
-
-    @DeleteMapping("/{userId}/addresses/{addressId}")
-    public ResponseEntity<String> deleteUserAddress(@PathVariable UUID userId, @PathVariable UUID addressId) {
-        return ResponseEntity.ok("Delete address with ID: " + addressId + " for user ID: " + userId);
     }
 }
