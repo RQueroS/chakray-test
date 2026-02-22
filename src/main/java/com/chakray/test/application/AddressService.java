@@ -8,18 +8,22 @@ import org.slf4j.LoggerFactory;
 
 import com.chakray.test.application.exceptions.NotFoundException;
 import com.chakray.test.domain.Address;
+import com.chakray.test.domain.Country;
 import com.chakray.test.domain.User;
 import com.chakray.test.domain.ports.in.RetrieveAddressUseCase;
+import com.chakray.test.domain.ports.in.SaveAddressUseCase;
 import com.chakray.test.domain.ports.out.AddressRepositoryPort;
+import com.chakray.test.domain.ports.out.CountryRepositoryPort;
 import com.chakray.test.domain.ports.out.UserRepositoryPort;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class AddressService implements RetrieveAddressUseCase {
+public class AddressService implements RetrieveAddressUseCase, SaveAddressUseCase {
     private static final Logger logger = LoggerFactory.getLogger(AddressService.class);
     private final AddressRepositoryPort addressRepositoryPort;
     private final UserRepositoryPort userRepositoryPort;
+    private final CountryRepositoryPort countryRepositoryPort;
 
     @Override
     public List<Address> getAllAddressesByUserId(UUID userId) {
@@ -31,6 +35,29 @@ public class AddressService implements RetrieveAddressUseCase {
 
         logger.debug("Successfully retrieved {} addresses for user ID: {}", addresses.size(), userId);
         return addresses;
+    }
+
+    @Override
+    public Address saveAddress(UUID userId, Address address) {
+
+        logger.debug("Processing address with name {} for user ID {}", address.getName(), userId);
+        Country existingCountry = countryRepositoryPort.findCountryByCode(address.getCountry().getCode())
+                .orElseThrow(() -> {
+                    logger.warn("Country with code {} not found", address.getCountry().getCode());
+                    return new NotFoundException(
+                            "Country with code " + address.getCountry().getCode() + " not found");
+                });
+        logger.debug("Country with code {} found successfully", existingCountry.getCode());
+        address.setCountry(existingCountry);
+
+        logger.debug("Retrieving user with ID: {} to save address", userId);
+        User user = getUserById(userId);
+
+        logger.debug("Saving address with name {}", address.getName());
+        Address savedAddress = addressRepositoryPort.saveAddress(user, address);
+
+        logger.debug("Address with name {} saved successfully", address.getName());
+        return savedAddress;
     }
 
     private User getUserById(UUID id) {

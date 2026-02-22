@@ -1,4 +1,4 @@
-package com.chakray.test.infrastructure.web.user.dto;
+package com.chakray.test.infrastructure.web.address.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

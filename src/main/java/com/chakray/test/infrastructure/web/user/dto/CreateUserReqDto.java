@@ -2,6 +2,8 @@ package com.chakray.test.infrastructure.web.user.dto;
 
 import java.util.List;
 
+import com.chakray.test.infrastructure.web.address.dto.CreateAddressReqDto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;

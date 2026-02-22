@@ -20,6 +20,7 @@ public class AddressJpaAdapter implements AddressRepositoryPort {
     private static final Logger logger = LoggerFactory.getLogger(AddressJpaAdapter.class);
     private final AddressJpaRepository addressJpaRepository;
     private final AddressJpaMapper addressJpaMapper;
+    private final UserJpaMapper userJpaMapper;
 
     @Override
     public List<Address> findAllAddressesByUser(User user) {
@@ -31,5 +32,21 @@ public class AddressJpaAdapter implements AddressRepositoryPort {
 
         logger.debug("Successfully mapped {} AddressEntity to Address", addresses.size());
         return addresses;
+    }
+
+    @Override
+    public Address saveAddress(User user, Address address) {
+        logger.debug("Saving address with name {}", address.getName());
+        AddressEntity addressEntity = addressJpaMapper.toEntity(address);
+
+        logger.debug("Saving AddressEntity to the database");
+        addressEntity.setUser(userJpaMapper.toEntity(user));
+        AddressEntity savedEntity = addressJpaRepository.save(addressEntity);
+
+        logger.debug("Mapping saved AddressEntity back to Address domain object");
+        Address savedAddress = addressJpaMapper.toDomain(savedEntity);
+
+        logger.debug("Successfully saved address with name {}", savedAddress.getName());
+        return savedAddress;
     }
 }
