@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +33,7 @@ public class AuthController {
     @ApiResponse(responseCode = "200", description = "Successful login")
     @ApiResponse(responseCode = "400", description = "Username or password is incorrect", content = @Content)
     @PostMapping("/login")
-    public ResponseEntity<LoginResDto> login(@Valid LoginReqDto loginReqDto) {
+    public ResponseEntity<LoginResDto> login(@Valid @RequestBody LoginReqDto loginReqDto) {
         logger.info("Login request received for username: {}", loginReqDto.getUsername());
         LoginRequest loginRequest = authDtoMapper.toLoginRequest(loginReqDto);
 
