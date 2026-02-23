@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chakray.test.domain.Address;
+import com.chakray.test.domain.ports.in.DeleteAddressUseCase;
 import com.chakray.test.domain.ports.in.RetrieveAddressUseCase;
 import com.chakray.test.domain.ports.in.SaveAddressUseCase;
 import com.chakray.test.infrastructure.web.address.dto.AddressResDto;
@@ -38,6 +39,7 @@ public class AddressController {
     private final AddressDtoMapper addressDtoMapper;
     private final RetrieveAddressUseCase retrieveAddressUseCase;
     private final SaveAddressUseCase saveAddressUseCase;
+    private final DeleteAddressUseCase deleteAddressUseCase;
 
     @Operation(summary = "Get all addresses for a user")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved list of addresses for the user")
@@ -77,17 +79,25 @@ public class AddressController {
         return ResponseEntity.ok(res);
     }
 
+    @Operation(summary = "Delete an address for a user")
+    @ApiResponse(responseCode = "204", description = "Successfully deleted the address for the user")
+    @ApiResponse(responseCode = "404", description = "User or address not found", content = @Content)
+    @DeleteMapping("/{addressId}")
+    public ResponseEntity<Void> deleteUserAddress(
+            @Schema(description = "The UUID of the user", example = "537b5b2f-caef-4483-b165-8c8b8c77c80b") @PathVariable UUID userId,
+            @Schema(description = "The ID of the address", example = "1") @PathVariable Long addressId) {
+
+        logger.info("Received request to delete address with ID: {} for user ID: {}", addressId, userId);
+        deleteAddressUseCase.deleteAddress(userId, addressId);
+
+        logger.info("Successfully deleted address with ID: {} for user ID: {}", addressId, userId);
+        return ResponseEntity.noContent().build();
+    }
+
     @PatchMapping("/{addressId}")
     public ResponseEntity<String> updateUserAddress(
             @Schema(description = "The UUID of the user", example = "537b5b2f-caef-4483-b165-8c8b8c77c80b") @PathVariable UUID userId,
             @Schema(description = "The ID of the address", example = "1") @PathVariable Long addressId) {
         return ResponseEntity.ok("Update address with ID: " + addressId + " for user ID: " + userId);
-    }
-
-    @DeleteMapping("/{addressId}")
-    public ResponseEntity<String> deleteUserAddress(
-            @Schema(description = "The UUID of the user", example = "537b5b2f-caef-4483-b165-8c8b8c77c80b") @PathVariable UUID userId,
-            @Schema(description = "The ID of the address", example = "1") @PathVariable Long addressId) {
-        return ResponseEntity.ok("Delete address with ID: " + addressId + " for user ID: " + userId);
     }
 }

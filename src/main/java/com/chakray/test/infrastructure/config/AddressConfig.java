@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.chakray.test.application.AddressService;
+import com.chakray.test.domain.ports.in.DeleteAddressUseCase;
 import com.chakray.test.domain.ports.in.RetrieveAddressUseCase;
 import com.chakray.test.domain.ports.in.SaveAddressUseCase;
 import com.chakray.test.domain.ports.out.AddressRepositoryPort;
@@ -20,6 +21,12 @@ public class AddressConfig {
 
     @Bean
     public SaveAddressUseCase saveAddressUseCase(AddressRepositoryPort addressRepositoryPort,
+            UserRepositoryPort userRepositoryPort, CountryRepositoryPort countryRepositoryPort) {
+        return new AddressService(addressRepositoryPort, userRepositoryPort, countryRepositoryPort);
+    }
+
+    @Bean
+    public DeleteAddressUseCase deleteAddressUseCase(AddressRepositoryPort addressRepositoryPort,
             UserRepositoryPort userRepositoryPort, CountryRepositoryPort countryRepositoryPort) {
         return new AddressService(addressRepositoryPort, userRepositoryPort, countryRepositoryPort);
     }

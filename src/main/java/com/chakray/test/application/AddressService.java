@@ -10,6 +10,7 @@ import com.chakray.test.application.exceptions.NotFoundException;
 import com.chakray.test.domain.Address;
 import com.chakray.test.domain.Country;
 import com.chakray.test.domain.User;
+import com.chakray.test.domain.ports.in.DeleteAddressUseCase;
 import com.chakray.test.domain.ports.in.RetrieveAddressUseCase;
 import com.chakray.test.domain.ports.in.SaveAddressUseCase;
 import com.chakray.test.domain.ports.out.AddressRepositoryPort;
@@ -19,7 +20,7 @@ import com.chakray.test.domain.ports.out.UserRepositoryPort;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class AddressService implements RetrieveAddressUseCase, SaveAddressUseCase {
+public class AddressService implements RetrieveAddressUseCase, SaveAddressUseCase, DeleteAddressUseCase {
     private static final Logger logger = LoggerFactory.getLogger(AddressService.class);
     private final AddressRepositoryPort addressRepositoryPort;
     private final UserRepositoryPort userRepositoryPort;
@@ -56,15 +57,28 @@ public class AddressService implements RetrieveAddressUseCase, SaveAddressUseCas
         logger.debug("Saving address with name {}", address.getName());
         Address savedAddress = addressRepositoryPort.saveAddress(user, address);
 
-        logger.debug("Address with name {} saved successfully", address.getName());
+        logger.debug("Address with name {} saved successfully", savedAddress.getName());
         return savedAddress;
     }
 
-    private User getUserById(UUID id) {
-        logger.debug("Retrieving user with id {}", id);
-        return userRepositoryPort.findUserById(id).orElseThrow(() -> {
-            logger.warn("User with id {} not found", id);
-            return new NotFoundException("User with id " + id + " not found");
+    @Override
+    public void deleteAddress(UUID userId, Long addressId) {
+        logger.debug("Retrieving user with ID: {} to delete address with ID: {}", userId, addressId);
+
+        addressRepositoryPort.findAddressByIdAndUserId(userId, addressId).orElseThrow(() -> {
+            logger.warn("Address with id {} not found for user ID {}", addressId, userId);
+            return new NotFoundException("Address with id " + addressId + " not found for user ID " + userId);
+        });
+
+        addressRepositoryPort.deleteAddressById(userId, addressId);
+        logger.debug("Address with id {} deleted successfully for user ID {}", addressId, userId);
+    }
+
+    private User getUserById(UUID userId) {
+        logger.debug("Retrieving user with id {}", userId);
+        return userRepositoryPort.findUserById(userId).orElseThrow(() -> {
+            logger.warn("User with id {} not found", userId);
+            return new NotFoundException("User with id " + userId + " not found");
         });
     }
 }

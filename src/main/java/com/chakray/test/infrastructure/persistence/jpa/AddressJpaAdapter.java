@@ -1,6 +1,8 @@
 package com.chakray.test.infrastructure.persistence.jpa;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,5 +50,22 @@ public class AddressJpaAdapter implements AddressRepositoryPort {
 
         logger.debug("Successfully saved address with name {}", savedAddress.getName());
         return savedAddress;
+    }
+
+    @Override
+    public void deleteAddressById(UUID userId, Long addressId) {
+        logger.debug("Deleting address with ID {} for user ID {}", addressId, userId);
+        addressJpaRepository.deleteByIdAndUserId(addressId, userId);
+
+        logger.debug("Successfully deleted address with ID {} for user ID {}", addressId, userId);
+    }
+
+    @Override
+    public Optional<Address> findAddressByIdAndUserId(UUID userId, Long addressId) {
+        logger.debug("Fetching address with ID {} for user ID {} from the database", addressId, userId);
+        Optional<AddressEntity> addressEntity = addressJpaRepository.findByIdAndUserId(addressId, userId);
+
+        logger.debug("Mapping AddressEntity to Address domain object if present");
+        return addressEntity.map(addressJpaMapper::toDomain);
     }
 }
