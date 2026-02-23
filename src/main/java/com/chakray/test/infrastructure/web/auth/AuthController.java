@@ -13,6 +13,7 @@ import com.chakray.test.infrastructure.web.auth.dto.LoginReqDto;
 import com.chakray.test.infrastructure.web.auth.dto.LoginResDto;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,7 +30,7 @@ public class AuthController {
 
     @Operation(summary = "Authenticate user and return a JWT token")
     @ApiResponse(responseCode = "200", description = "Successful login")
-    @ApiResponse(responseCode = "400", description = "Username or password is incorrect")
+    @ApiResponse(responseCode = "400", description = "Username or password is incorrect", content = @Content)
     @PostMapping("/login")
     public ResponseEntity<LoginResDto> login(@Valid LoginReqDto loginReqDto) {
         logger.info("Login request received for username: {}", loginReqDto.getUsername());
