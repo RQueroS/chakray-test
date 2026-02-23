@@ -15,4 +15,6 @@ public interface AddressRepositoryPort {
     void deleteAddressById(UUID userId, Long addressId);
 
     Optional<Address> findAddressByIdAndUserId(UUID userId, Long addressId);
+
+    Address updateAddress(User user, Address currentAddress, Address updatedAddress);
 }

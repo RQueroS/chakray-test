@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import com.chakray.test.domain.Address;
 import com.chakray.test.infrastructure.web.address.dto.AddressResDto;
 import com.chakray.test.infrastructure.web.address.dto.CreateAddressReqDto;
+import com.chakray.test.infrastructure.web.address.dto.UpdateAddressReqDto;
 
 @Mapper(componentModel = "spring")
 public interface AddressDtoMapper {
@@ -13,5 +14,8 @@ public interface AddressDtoMapper {
     AddressResDto toDto(Address address);
 
     @Mapping(source = "countryCode", target = "country.code")
-    Address toEntity(CreateAddressReqDto addressReqDto);
+    Address toDomain(CreateAddressReqDto addressReqDto);
+
+    @Mapping(source = "countryCode", target = "country.code")
+    Address toDomain(UpdateAddressReqDto addressReqDto);
 }

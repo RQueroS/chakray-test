@@ -21,6 +21,7 @@ import com.chakray.test.domain.ports.in.RetrieveAddressUseCase;
 import com.chakray.test.domain.ports.in.SaveAddressUseCase;
 import com.chakray.test.infrastructure.web.address.dto.AddressResDto;
 import com.chakray.test.infrastructure.web.address.dto.CreateAddressReqDto;
+import com.chakray.test.infrastructure.web.address.dto.UpdateAddressReqDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -67,7 +68,7 @@ public class AddressController {
             @Valid @RequestBody CreateAddressReqDto addressReqDto) {
 
         logger.info("Received request to add address for user ID: {}", userId);
-        Address domainAddress = addressDtoMapper.toEntity(addressReqDto);
+        Address domainAddress = addressDtoMapper.toDomain(addressReqDto);
 
         logger.debug("Mapped CreateAddressReqDto to Address entity for user ID: {}", userId);
         Address savedAddress = saveAddressUseCase.saveAddress(userId, domainAddress);
@@ -94,10 +95,23 @@ public class AddressController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Update an address for a user")
+    @ApiResponse(responseCode = "200", description = "Successfully updated the address for the user")
+    @ApiResponse(responseCode = "404", description = "User or address not found", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Country code not found", content = @Content)
     @PatchMapping("/{addressId}")
-    public ResponseEntity<String> updateUserAddress(
-            @Schema(description = "The UUID of the user", example = "537b5b2f-caef-4483-b165-8c8b8c77c80b") @PathVariable UUID userId,
-            @Schema(description = "The ID of the address", example = "1") @PathVariable Long addressId) {
-        return ResponseEntity.ok("Update address with ID: " + addressId + " for user ID: " + userId);
+    public ResponseEntity<AddressResDto> updateUserAddress(
+            @Schema(description = "The UUID of the user", example = "c9fd6022-112b-4bc7-90b0-be3194b5bfe7") @PathVariable UUID userId,
+            @Schema(description = "The ID of the address", example = "1") @PathVariable Long addressId,
+            @Valid @RequestBody UpdateAddressReqDto body) {
+
+        logger.info("Received request to update address with ID: {} for user ID: {}", addressId, userId);
+        Address domainAddress = addressDtoMapper.toDomain(body);
+
+        logger.debug("Mapped UpdateAddressReqDto to Address entity for user ID: {}", userId);
+        AddressResDto res = addressDtoMapper.toDto(saveAddressUseCase.updateAddress(userId, addressId, domainAddress));
+
+        logger.info("Successfully updated address with ID: {} for user ID: {}", addressId, userId);
+        return ResponseEntity.ok(res);
     }
 }

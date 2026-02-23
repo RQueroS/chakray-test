@@ -68,4 +68,20 @@ public class AddressJpaAdapter implements AddressRepositoryPort {
         logger.debug("Mapping AddressEntity to Address domain object if present");
         return addressEntity.map(addressJpaMapper::toDomain);
     }
+
+    @Override
+    public Address updateAddress(User user, Address currentAddress, Address updatedAddress) {
+        logger.debug("Updating address with ID {} for user ID {}", currentAddress.getId(), user.getId());
+        AddressEntity addressEntity = addressJpaMapper.toEntity(currentAddress);
+
+        logger.debug("Updating AddressEntity with new values from Address domain object");
+        addressJpaMapper.updateEntityFromDto(updatedAddress, addressEntity);
+
+        logger.debug("Saving updated AddressEntity to the database");
+        addressEntity.setUser(userJpaMapper.toEntity(user));
+        AddressEntity updatedEntity = addressJpaRepository.save(addressEntity);
+
+        logger.debug("Mapping updated AddressEntity back to Address domain object");
+        return addressJpaMapper.toDomain(updatedEntity);
+    }
 }

@@ -42,12 +42,8 @@ public class AddressService implements RetrieveAddressUseCase, SaveAddressUseCas
     public Address saveAddress(UUID userId, Address address) {
 
         logger.debug("Processing address with name {} for user ID {}", address.getName(), userId);
-        Country existingCountry = countryRepositoryPort.findCountryByCode(address.getCountry().getCode())
-                .orElseThrow(() -> {
-                    logger.warn("Country with code {} not found", address.getCountry().getCode());
-                    return new NotFoundException(
-                            "Country with code " + address.getCountry().getCode() + " not found");
-                });
+        Country existingCountry = getCountryByCode(address.getCountry().getCode());
+
         logger.debug("Country with code {} found successfully", existingCountry.getCode());
         address.setCountry(existingCountry);
 
@@ -64,14 +60,33 @@ public class AddressService implements RetrieveAddressUseCase, SaveAddressUseCas
     @Override
     public void deleteAddress(UUID userId, Long addressId) {
         logger.debug("Retrieving user with ID: {} to delete address with ID: {}", userId, addressId);
-
-        addressRepositoryPort.findAddressByIdAndUserId(userId, addressId).orElseThrow(() -> {
-            logger.warn("Address with id {} not found for user ID {}", addressId, userId);
-            return new NotFoundException("Address with id " + addressId + " not found for user ID " + userId);
-        });
+        getAddressByIdAndUserId(userId, addressId);
 
         addressRepositoryPort.deleteAddressById(userId, addressId);
         logger.debug("Address with id {} deleted successfully for user ID {}", addressId, userId);
+    }
+
+    @Override
+    public Address updateAddress(UUID userId, Long addressId, Address address) {
+        logger.debug("Retrieving user with ID: {} to update address with ID: {}", userId, addressId);
+        User user = getUserById(userId);
+        Address currentAddress = getAddressByIdAndUserId(userId, addressId);
+
+        if (address.getCountry().getCode() != null) {
+            logger.debug("Processing updated address with name {} for user ID {}", address.getName(), userId);
+            Country existingCountry = getCountryByCode(address.getCountry().getCode());
+            logger.debug("Country with code {} found successfully", existingCountry.getCode());
+            address.setCountry(existingCountry);
+        }
+
+        logger.debug("Processing updated address with name {} for user ID {}",
+                address.getName(), userId);
+        Address updatedAddress = addressRepositoryPort.updateAddress(user, currentAddress,
+                address);
+
+        logger.debug("Address with name {} updated successfully for user ID {}",
+                updatedAddress.getName(), userId);
+        return updatedAddress;
     }
 
     private User getUserById(UUID userId) {
@@ -80,5 +95,23 @@ public class AddressService implements RetrieveAddressUseCase, SaveAddressUseCas
             logger.warn("User with id {} not found", userId);
             return new NotFoundException("User with id " + userId + " not found");
         });
+    }
+
+    private Address getAddressByIdAndUserId(UUID userId, Long addressId) {
+        logger.debug("Retrieving address with id {} for user ID {}", addressId, userId);
+        return addressRepositoryPort.findAddressByIdAndUserId(userId, addressId).orElseThrow(() -> {
+            logger.warn("Address with id {} not found for user ID {}", addressId, userId);
+            return new NotFoundException("Address with id " + addressId + " not found for user ID " + userId);
+        });
+    }
+
+    private Country getCountryByCode(String countryCode) {
+        logger.debug("Retrieving country with code {}", countryCode);
+        return countryRepositoryPort.findCountryByCode(countryCode)
+                .orElseThrow(() -> {
+                    logger.warn("Country with code {} not found", countryCode);
+                    return new NotFoundException(
+                            "Country with code " + countryCode + " not found");
+                });
     }
 }
