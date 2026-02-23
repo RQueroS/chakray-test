@@ -3,6 +3,7 @@ package com.chakray.test.infrastructure.web.auth.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 public class LoginReqDto {
@@ -12,5 +13,6 @@ public class LoginReqDto {
 
     @Schema(description = "Password of the user", example = "P@ssw0rd1234")
     @NotBlank(message = "Password is required")
+    @ToString.Exclude
     private String password;
 }

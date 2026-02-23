@@ -19,6 +19,16 @@
       "name": "app.cors.allowed-headers",
       "type": "java.lang.String",
       "description": "A description for 'app.cors.allowed-headers'"
+    },
+    {
+      "name": "app.jwt.secret",
+      "type": "java.lang.String",
+      "description": "A description for 'app.jwt.secret'"
+    },
+    {
+      "name": "app.jwt.expiration",
+      "type": "java.lang.Long",
+      "description": "A description for 'app.jwt.expiration'"
     }
   ]
 }

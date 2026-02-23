@@ -4,9 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-public class LoginRequest {
-    private String username;
-
+public class LoginResponse {
     @ToString.Exclude
-    private String password;
+    private String token;
 }

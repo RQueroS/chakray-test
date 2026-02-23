@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import com.chakray.test.domain.ports.out.PasswordEncoderPort;
 
 @Component
-public class PasswordEncoderAdapter implements PasswordEncoderPort {
+public class PasswordHashAdapter implements PasswordEncoderPort {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override

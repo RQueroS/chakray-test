@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.chakray.test.domain.LoginRequest;
 import com.chakray.test.domain.ports.in.AuthUseCase;
 import com.chakray.test.infrastructure.web.auth.dto.LoginReqDto;
+import com.chakray.test.infrastructure.web.auth.dto.LoginResDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,14 +31,14 @@ public class AuthController {
     @ApiResponse(responseCode = "200", description = "Successful login")
     @ApiResponse(responseCode = "400", description = "Username or password is incorrect")
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid LoginReqDto loginReqDto) {
+    public ResponseEntity<LoginResDto> login(@Valid LoginReqDto loginReqDto) {
         logger.info("Login request received for username: {}", loginReqDto.getUsername());
         LoginRequest loginRequest = authDtoMapper.toLoginRequest(loginReqDto);
 
-        logger.debug("Mapped LoginRequest: {}", loginRequest);
-        String token = authUseCase.login(loginRequest);
+        logger.debug("LoginRequest mapped: {}", loginRequest);
+        LoginResDto loginResDto = authDtoMapper.toLoginResDto(authUseCase.login(loginRequest));
 
         logger.info("Login successful for username: {}", loginReqDto.getUsername());
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(loginResDto);
     }
 }
