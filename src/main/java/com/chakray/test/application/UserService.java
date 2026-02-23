@@ -15,6 +15,7 @@ import com.chakray.test.domain.ports.in.DeleteUserUseCase;
 import com.chakray.test.domain.ports.in.RetrieveUserUseCase;
 import com.chakray.test.domain.ports.in.SaveUserUseCase;
 import com.chakray.test.domain.ports.out.CountryRepositoryPort;
+import com.chakray.test.domain.ports.out.PasswordEncoderPort;
 import com.chakray.test.domain.ports.out.UserRepositoryPort;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class UserService implements RetrieveUserUseCase, SaveUserUseCase, Delete
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepositoryPort userRepositoryPort;
     private final CountryRepositoryPort countryRepositoryPort;
+    private final PasswordEncoderPort passwordEncoderPort;
 
     @Override
     public List<User> getUsers(String sortedBy, String orderBy, String filter) {
@@ -68,6 +70,8 @@ public class UserService implements RetrieveUserUseCase, SaveUserUseCase, Delete
 
         logger.debug("No existing user with taxId {}, proceeding to save",
                 user.getTaxId());
+        String encodedPassword = passwordEncoderPort.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         User savedUser = userRepositoryPort.saveUser(user);
 
         logger.debug("Successfully saved user with id {}", savedUser.getId());

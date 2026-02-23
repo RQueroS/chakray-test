@@ -8,25 +8,26 @@ import com.chakray.test.domain.ports.in.DeleteUserUseCase;
 import com.chakray.test.domain.ports.in.RetrieveUserUseCase;
 import com.chakray.test.domain.ports.in.SaveUserUseCase;
 import com.chakray.test.domain.ports.out.CountryRepositoryPort;
+import com.chakray.test.domain.ports.out.PasswordEncoderPort;
 import com.chakray.test.domain.ports.out.UserRepositoryPort;
 
 @Configuration
 public class UserConfig {
     @Bean
     public RetrieveUserUseCase retrieveUserUseCase(UserRepositoryPort userRepositoryPort,
-            CountryRepositoryPort countryRepositoryPort) {
-        return new UserService(userRepositoryPort, countryRepositoryPort);
+            CountryRepositoryPort countryRepositoryPort, PasswordEncoderPort passwordEncoderPort) {
+        return new UserService(userRepositoryPort, countryRepositoryPort, passwordEncoderPort);
     }
 
     @Bean
     public SaveUserUseCase saveUserUseCase(UserRepositoryPort userRepositoryPort,
-            CountryRepositoryPort countryRepositoryPort) {
-        return new UserService(userRepositoryPort, countryRepositoryPort);
+            CountryRepositoryPort countryRepositoryPort, PasswordEncoderPort passwordEncoderPort) {
+        return new UserService(userRepositoryPort, countryRepositoryPort, passwordEncoderPort);
     }
 
     @Bean
     public DeleteUserUseCase deleteUserUseCase(UserRepositoryPort userRepositoryPort,
-            CountryRepositoryPort countryRepositoryPort) {
-        return new UserService(userRepositoryPort, countryRepositoryPort);
+            CountryRepositoryPort countryRepositoryPort, PasswordEncoderPort passwordEncoderPort) {
+        return new UserService(userRepositoryPort, countryRepositoryPort, passwordEncoderPort);
     }
 }

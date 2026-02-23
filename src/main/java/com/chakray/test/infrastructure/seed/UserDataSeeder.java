@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.chakray.test.domain.ports.out.PasswordEncoderPort;
 import com.chakray.test.infrastructure.persistence.jpa.entity.AddressEntity;
 import com.chakray.test.infrastructure.persistence.jpa.entity.CountryEntity;
 import com.chakray.test.infrastructure.persistence.jpa.entity.UserEntity;
@@ -27,6 +28,7 @@ public class UserDataSeeder implements CommandLineRunner {
     private final UserJpaRepository userJpaRepository;
     private final CountryJpaRepository countryDataSeeder;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final PasswordEncoderPort passwordEncoderPort;
 
     @Override
     public void run(String... args) throws Exception {
@@ -66,6 +68,9 @@ public class UserDataSeeder implements CommandLineRunner {
                         address.setUser(user);
                     }
                 }
+
+                String encodedPassword = passwordEncoderPort.encode(user.getPassword());
+                user.setPassword(encodedPassword);
                 userJpaRepository.save(user);
             }
 
