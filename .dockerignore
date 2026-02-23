@@ -1,6 +1,27 @@
-# dotenv environment variable files
+# Ignore the .env files and any local configuration files
 .env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+.env.*
+*.local
+
+# Ignore build artifacts and dependencies
+target/
+*.jar
+*.war
+.mvn/wrapper/maven-wrapper.jar
+
+# Ignore IDE-specific files and directories
+.idea/
+.vscode/
+*.swp
+*.iml
+.classpath
+.project
+.settings/
+
+# Ignore version control directories and files
+.git
+.gitignore
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
