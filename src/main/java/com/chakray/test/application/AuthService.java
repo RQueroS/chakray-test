@@ -34,7 +34,7 @@ public class AuthService implements AuthUseCase {
             throw new BadRequestException("Username or password is incorrect");
         }
 
-        TokenPayload payload = new TokenPayload(user.getId());
+        TokenPayload payload = new TokenPayload(user.getId(), user.getTaxId());
 
         LoginResponse response = new LoginResponse();
         response.setToken(tokenProviderPort.generateToken(payload));
