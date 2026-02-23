@@ -33,6 +33,7 @@
 		<version.mapstruct>1.6.3</version.mapstruct>
 		<version.mapstruct-lombok>0.2.0</version.mapstruct-lombok>
 		<version.jsonwebtoken>0.13.0</version.jsonwebtoken>
+		<version.liquibase>5.0.1</version.liquibase>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -141,6 +142,38 @@
 							<version>${version.mapstruct-lombok}</version>
 						</path>
 					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.3.0</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>${project.basedir}/.env</file>
+							</files>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${version.liquibase}</version>
+				<configuration>
+					<url>${DATABASE_URL}</url>
+					<username>${POSTGRES_USER}</username>
+					<password>${POSTGRES_PASSWORD}</password>
+					<driver>org.postgresql.Driver</driver>
+					<changeSetAuthor>chakray</changeSetAuthor>
+					<outputChangeLogFile>
+						src/main/resources/db/changelog/changesets/${CHANGELOG_FILE}</outputChangeLogFile>
 				</configuration>
 			</plugin>
 		</plugins>

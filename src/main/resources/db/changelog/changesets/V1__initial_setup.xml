@@ -1,0 +1,72 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="chakray" id="1771875643148-1">
+        <createTable tableName="countries">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="countries_pkey"/>
+            </column>
+            <column name="code" type="VARCHAR(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="chakray" id="1771875643148-2">
+        <createTable tableName="users">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(14)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tax_id" type="VARCHAR(13)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="chakray" id="1771875643148-3">
+        <addUniqueConstraint columnNames="code" constraintName="uk5dhgnik9p8t72kaktdb8kd8dt" tableName="countries"/>
+    </changeSet>
+    <changeSet author="chakray" id="1771875643148-4">
+        <addUniqueConstraint columnNames="tax_id" constraintName="uktb5xl1ncpt9amut4mf6movgvk" tableName="users"/>
+    </changeSet>
+    <changeSet author="chakray" id="1771875643148-5">
+        <createTable tableName="addresses">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="addresses_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="chakray" id="1771875643148-6">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="addresses" constraintName="fk1fa36y2oqhao3wgg2rw1pi459" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="chakray" id="1771875643148-7">
+        <addForeignKeyConstraint baseColumnNames="country_id" baseTableName="addresses" constraintName="fkn3sth7s3kur1rafwbbrqqnswt" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="countries" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
