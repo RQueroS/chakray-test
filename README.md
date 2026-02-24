@@ -120,9 +120,19 @@ docker compose run --rm api ./mvnw test -Dspring.profiles.active=test
 
 ---
 
-## Documentation
+## API Access & Documentation
 
-### API Access
+The API can be accessed through the following endpoints depending on the environment:
+
+### Public Environment
+
+**Base URL:**
+[https://chakray-test-production.up.railway.app](https://chakray-test-production.up.railway.app)
+
+**Swagger UI:**
+[https://chakray-test-production.up.railway.app/swagger-ui/index.html](https://chakray-test-production.up.railway.app/swagger-ui/index.html)
+
+### Local Environment
 
 **Base URL:**
 [http://localhost:{APP_PORT}](http://localhost:{APP_PORT})
